@@ -1,0 +1,120 @@
+<html>
+  <head>
+    <title>j2y converter</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="JSONフォーマットをYAMLフォーマットに変換します.。JSONデータをYAMLデータに変換します。JSON形式をYAML形式に変換します。" />
+    <link rel="stylesheet" href="./css/bootstrap.css" />
+    <style>
+
+      .txt_area{
+
+         font-style: normal;
+         font-variant-ligatures: normal;
+         font-variant-caps: normal;
+         font-variant-numeric: normal;
+         font-weight: normal;
+         font-stretch: normal;
+         font-size: 12px;
+         line-height: normal;
+         font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro, monospace;
+
+      }
+
+    </style>    
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      
+        ga('create', 'UA-85721675-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://rawgit.com/jeffsu/json2yaml/master/src/json2yaml.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/3.4.2/js-yaml.js"></script>
+    <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.3/clipboard.min.js"></script>
+
+    <script type="text/javascript">
+
+       $(function () {
+          var clipboard = new Clipboard('.cpbtn');
+          clipboard.on('success', function(e) {
+                e.clearSelection();
+          });
+       });
+
+      function convert(){
+
+        value = $('#from_area').val()
+        if(value.trim().length == 0){
+          return;
+        }
+
+        try{
+          var json = JSON.parse(value);
+        }catch(e){
+           $('#to_area').val(e)
+           return
+        }
+
+        //return '"'+escape(str).replace(/%u/g,'\\u').replace(/%U/g,'\\U').replace(/%/g,'\\x')+'"';
+        yaml = json2yaml(json);
+        yaml = unescape(yaml.replace(/\\u/g, '%u').replace(/\\U/g, '%U').replace(/\\x/g, '%'));
+        
+        $('#to_area').val(yaml)
+
+      }
+
+    </script>
+  </head>
+
+<body >
+
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">j2y converter</a>
+      </div>
+    </div>
+  </nav>
+
+<div class="my-sample">
+<form>
+  <div class="container-fluid">
+    <table >
+      <tr>
+        <td>
+             <div class="form-group">
+               <label for="from_area">JSON:</label>
+               <textarea id="from_area" rows="15" cols="70" class="form-control txt_area" onkeyup="javscript:convert();"></textarea>
+               </div>
+        </td>
+        <td width=20px>
+        </td>
+        
+        <td>
+            <div class="form-group">
+               <label for="to_area">YAML:</label>
+               <button class="cpbtn" style="border:none;padding:0px 0px; "  data-clipboard-action="copy"  data-clipboard-target="#to_area">
+                 <img src="./icon/clip_icon.jpg" width=25px alt="copy" >
+               </button>
+
+               <textarea id="to_area" rows="15" cols="70" class="form-control txt_area" style="letter-specing: .1em"></textarea>
+            </div>
+        </td>
+      </tr>
+    </table>
+    <a href=# class="btn btn-default" onclick="javscript:convert();">convert</a>
+
+</div>
+
+<form>
+</div>
+
+</body>
+
+</html>
